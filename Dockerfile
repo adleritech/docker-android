@@ -17,6 +17,7 @@ RUN echo $JAVA_HOME
 # Install Deps
 RUN dpkg --add-architecture i386 && apt-get update && apt-get install -y --force-yes expect unzip git wget libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386 python curl libqt5widgets5 && apt-get clean && rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+
 # Copy install tools
 COPY tools /opt/tools
 ENV PATH ${PATH}:/opt/tools
@@ -31,6 +32,7 @@ RUN mkdir /opt/android-sdk-linux && \
 
 RUN /opt/tools/android-accept-licenses.sh "/opt/android-sdk-linux/tools/android update sdk --all --no-ui --filter platform-tools"
 RUN /opt/tools/android-accept-licenses.sh "/opt/android-sdk-linux/tools/android update sdk --all --no-ui --filter build-tools-25.0.0"
+RUN /opt/tools/android-accept-licenses.sh "/opt/android-sdk-linux/tools/android update sdk --all --no-ui --filter build-tools-26.0.2"
 RUN /opt/tools/android-accept-licenses.sh "/opt/android-sdk-linux/tools/android update sdk --all --no-ui --filter android-22"
 RUN /opt/tools/android-accept-licenses.sh "/opt/android-sdk-linux/tools/android update sdk --all --no-ui --filter android-24"
 RUN /opt/tools/android-accept-licenses.sh "/opt/android-sdk-linux/tools/android update sdk --all --no-ui --filter android-25"
