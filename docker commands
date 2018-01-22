@@ -1,0 +1,27 @@
+RUN DOCKER
+docker run --tty --interactive --volume=$(pwd):/opt/workspace --workdir=/opt/workspace --rm <IMG_NAME> /bin/bash
+
+RUN EMU
+docker exec -it <ID> emulator64-arm -avd <EMULATOR_NAME> -no-audio -no-window -no-boot-anim -nojni -no-accel -show-kernel -no-snapstorage -no-cache
+
+LOGCAT ON DOCKER EMU
+docker exec -it <ID> adb logcat
+
+adb push /home/mira/liftago/liftago-android/builds/liftago-passenger_b9999_v2.16.2.9999-TEST.apk /data/local/tmp/com.adleritech.app.liftago.passenger.test
+adb shell pm install -r "/data/local/tmp/com.adleritech.app.liftago.passenger.test"
+adb shell am start -n "com.adleritech.app.liftago.passenger.test/com.adleritech.app.liftago.passenger.activity.PassengerLauncherActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
+
+
+
+CREATE EMULATOR
+docker exec -it <CONTAINER_ID> /opt/android-sdk-linux/tools/bin/avdmanager create avd -n testEmulator -k "system-images;android-25;google_apis;armeabi-v7a"
+
+RUN EMULATOR
+docker exec -it <CONTAINER_ID> /opt/android-sdk-linux/emulator/emulator -avd testEmulator -no-audio -no-window
+
+CREATE DOCKER IMAGE
+docker build -t ltgdocker/docker-android:1.0.2 .
+
+PUSH DOCKER IMAGE
+docker login
+docker push ltgdocker/docker-android:1.0.2
