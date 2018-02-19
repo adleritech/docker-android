@@ -25,3 +25,5 @@ docker build -t ltgdocker/docker-android:1.0.2 .
 PUSH DOCKER IMAGE
 docker login
 docker push ltgdocker/docker-android:1.0.2
+
+
